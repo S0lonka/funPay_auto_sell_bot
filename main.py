@@ -10,6 +10,11 @@ import time
 import logging
 import sys
 
+# My utils
+from app.config.config import ENV_DIRECTORY
+from app.utils.file_utils import check_file
+
+
 
 # Настройка логгера
 logging.basicConfig(
@@ -92,4 +97,5 @@ def click_by_login(driver: uc.Chrome) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if check_file(fr"{ENV_DIRECTORY}\env.env"):
+        main()
