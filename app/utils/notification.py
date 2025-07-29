@@ -33,7 +33,7 @@ class Funpay_notification():
                           duration : str = "short"
                           ) -> None:
         
-        if NOTIFICATION_FLAG and duration in ["short", "long"]:
+        if NOTIFICATION_FLAG and duration in ["short", "long"]:     # Проверка что уведомления включены И duration указано верно
             try:
                 self.toast = Notification(
                     app_id   = self.app_name,   # Имя приложения
@@ -44,7 +44,7 @@ class Funpay_notification():
                 )
 
                 self.show_notification()
-                
+
             except Exception as e:
                 logging.error(f"Ошибка уведомлений: {e}")
         else:
@@ -53,3 +53,4 @@ class Funpay_notification():
 
     def show_notification(self) -> None:
         self.toast.show()  #  Отображаем уведомление
+        logging.info(f"Показано уведомление | {self.toast.title} |")
