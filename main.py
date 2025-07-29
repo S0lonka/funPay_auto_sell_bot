@@ -9,16 +9,16 @@ import keyboard
 import time
 import logging
 import sys
-import os
-import signal
+
 
 # Настройка логгера
 logging.basicConfig(
     level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
     handlers=[
-        logging.FileHandler('funPay.log'),  # Логи в файл
-        logging.StreamHandler()             # Логи в консоль
+        logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
+        logging.StreamHandler()                        # Логи в консоль
     ]
 )
 logger = logging.getLogger('main')
@@ -48,7 +48,7 @@ def main():
         # Проверяем заголовок страницы
         assert "FunPay — биржа игровых ценностей" in driver.title
         
-        logging.info("НАЧАЛО РАБОТЫ - esc | Чтобы выйти")
+        logger.info("НАЧАЛО РАБОТЫ - esc | Чтобы выйти")
         click_by_login(driver)
 
 
