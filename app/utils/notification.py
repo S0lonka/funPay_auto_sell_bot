@@ -1,4 +1,4 @@
-from win10toast import ToastNotifier
+from winotify import Notification
 
 import logging
 import os
@@ -18,25 +18,38 @@ logging.basicConfig(
 logger = logging.getLogger('notification')
 
 
-class Notification():
+
+class Funpay_notification():
     """Класс отправки уведомлений windows"""
     def __init__(self):
-        self.notification_flag = NOTIFICATION_FLAG  # Флаг уведомлений из конфига
-        self.toaster = ToastNotifier()              # Модель класса уведомлений
-        self.icon_path = fr"{os.getcwd()}\app\img\icon\funPay.ico"                 # Путь до иконки
+        self.app_name = "FunPay AUTO"                                # Имя приложения
+        self.notification_flag = NOTIFICATION_FLAG                   # Флаг уведомлений из конфига
+        self.icon_path = fr"{os.getcwd()}\app\img\icon\funPay.ico"   # Путь до иконки
 
 
-    def send_notification(self, title: str, msg: str, duration: int = 10):
-        if NOTIFICATION_FLAG:
+    def send_notification(self, 
+                          title    : str, 
+                          msg      : str, 
+                          duration : str = "short"
+                          ) -> None:
+        
+        if NOTIFICATION_FLAG and duration in ["short", "long"]:
             try:
-                self.toaster.show_toast(
-                    title=title,
-                    msg=msg,
-                    duration=duration,        # Длительность в секундах
-                    icon_path=self.icon_path, # Путь к иконке (опционально)
-                    threaded=True             # Показ уведомления в другом потоке (асинхронно)
+                self.toast = Notification(
+                    app_id   = self.app_name,   # Имя приложения
+                    title    = title,           # Заголовок уведомления
+                    msg      = msg,             # Основное сообщение
+                    duration = duration,        # Длительность в секундах
+                    icon     = self.icon_path   # Путь к иконке (опционально)
                 )
+
+                self.show_notification()
+                
             except Exception as e:
                 logging.error(f"Ошибка уведомлений: {e}")
         else:
             logging.warning(f"Уведмления отключены: уведомление {title} не отправлено")
+
+
+    def show_notification(self) -> None:
+        self.toast.show()  #  Отображаем уведомление
