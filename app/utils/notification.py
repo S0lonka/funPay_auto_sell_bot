@@ -28,27 +28,57 @@ class Funpay_notification():
 
 
     def send_notification(self, 
-                          title    : str, 
-                          msg      : str, 
-                          duration : str = "short"
-                          ) -> None:
+                        title    : str, 
+                        msg      : str, 
+                        duration : str = "short"
+                        ) -> None:
+        """Отправка уведомления с обработкой ошибок.
+    
+        Args:
+            title: Заголовок уведомления
+            msg: Текст сообщения
+            duration: Длительность ("short" или "long")
+        """
+
+        # Валидация параметров перед выполнением
+        if not NOTIFICATION_FLAG:
+            logging.warning(f"Уведомления отключены: '{title}' не отправлено")
+            return
+                
+        if duration not in ("short", "long"):
+            logging.error(f"Некорректная длительность: {duration}")
+            return  # Проверка что уведомления включены И duration указано верно
         
-        if NOTIFICATION_FLAG and duration in ["short", "long"]:     # Проверка что уведомления включены И duration указано верно
-            try:
-                self.toast = Notification(
-                    app_id   = self.app_name,   # Имя приложения
-                    title    = title,           # Заголовок уведомления
-                    msg      = msg,             # Основное сообщение
-                    duration = duration,        # Длительность в секундах
-                    icon     = self.icon_path   # Путь к иконке (опционально)
-                )
 
-                self.show_notification()
+        try:
+            # Конструктор уведомления
+            self.toast = Notification(
+                app_id   = self.app_name,   # Имя приложения
+                title    = title,           # Заголовок уведомления
+                msg      = msg,             # Основное сообщение
+                duration = duration,        # Длительность в секундах
+                icon     = self.icon_path   # Путь к иконке (опционально)
+            )
 
-            except Exception as e:
-                logging.error(f"Ошибка уведомлений: {e}")
-        else:
-            logging.warning(f"Уведмления отключены: уведомление {title} не отправлено")
+
+        except Exception as e:
+            logging.error(f"Ошибка уведомлений: {e}")
+            
+        finally:
+            self.show_notification() # отображаем уведомление
+
+
+
+
+    def add_actions_notification(self,
+                                label : str,
+                                launch: str):
+        self.toast.add_actions(
+            label=label,
+            launch=launch
+        )
+
+
 
 
     def show_notification(self) -> None:
