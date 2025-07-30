@@ -30,6 +30,11 @@ class Funpay_notification:
         self.show_notification = SHOW_NOTIFICATION                   # Флаг уведомлений из конфига
         self.icon_path = fr"{os.getcwd()}\app\img\icon\funPay.ico"   # Путь до иконки
 
+    def _skip(self) -> "Self":
+        """Заглушка для пропуска последующих вызовов (например, .show())."""
+        logger.info("сработала заглушка")
+        return self
+    
 
     def send_notification(self, 
                         title     : str, 
@@ -78,8 +83,6 @@ class Funpay_notification:
             return self
 
 
-
-
     def add_actions(self,
                     label : str,
                     launch: str
@@ -106,11 +109,6 @@ class Funpay_notification:
             finally:
                 return self
 
-            
-    def _skip(self) -> "Self":
-        """Заглушка для пропуска последующих вызовов (например, .show())."""
-        logger.info("сработала заглушка")
-        return self
 
     def show(self) -> None:
         """Отображает собранное уведомление
