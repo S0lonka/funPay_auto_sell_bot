@@ -2,7 +2,7 @@
 
 for_me.md
 
-__pycache__/
+
 
 app/env/
 *.env
@@ -11,3 +11,4 @@ app/env/
 
 test*
 
+\__pycache__
