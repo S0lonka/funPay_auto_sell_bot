@@ -32,6 +32,7 @@ logger = logging.getLogger('main')
 def main():
     driver = None
     try:
+        # Конструктор драйвера
         options = uc.ChromeOptions()
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_argument("--no-sandbox")
@@ -47,6 +48,7 @@ def main():
             use_subprocess=True
         )
 
+        # ------ Запуск ------
         driver.get("https://funpay.com")   # Открываем страницу
         time.sleep(4)                      # Ждём 5 секунд для прогрузки страницы
 
@@ -54,10 +56,12 @@ def main():
         assert "FunPay — биржа игровых ценностей" in driver.title
         
         logger.info("НАЧАЛО РАБОТЫ - esc | Чтобы выйти")
+
         click_by_login(driver)
 
 
         while True:
+            # Завершение программы
             if keyboard.is_pressed('esc'):
                 logger.info("Завершение программы")
 

@@ -5,7 +5,7 @@ from typing import Self
 import logging
 import os
 
-from app.config.config import NOTIFICATION_FLAG
+from app.config.config import SHOW_NOTIFICATION
 
 
 # Настройка логгера
@@ -18,6 +18,7 @@ logging.basicConfig(
         logging.StreamHandler()                        # Логи в консоль
     ]
 )
+
 logger = logging.getLogger('notification')
 
 
@@ -26,34 +27,38 @@ class Funpay_notification:
     """Класс отправки уведомлений windows"""
     def __init__(self):
         self.app_name = "FunPay AUTO"                                # Имя приложения
-        self.notification_flag = NOTIFICATION_FLAG                   # Флаг уведомлений из конфига
+        self.show_notification = SHOW_NOTIFICATION                   # Флаг уведомлений из конфига
         self.icon_path = fr"{os.getcwd()}\app\img\icon\funPay.ico"   # Путь до иконки
 
 
     def send_notification(self, 
-                        title    : str, 
-                        msg      : str, 
-                        duration : str = "short"
+                        title     : str, 
+                        msg       : str, 
+                        duration  : str  = "short",
+                        important : bool = False
                         ) -> Self:
-        """Отправка уведомления с обработкой ошибок.
+        """Конструктор уведомления.
     
         Args:
-            title    (str) : Заголовок уведомления
-            msg      (str) : Текст сообщения
-            duration (str) : Длительность ("short" или "long")
+            title     (str)  : Заголовок уведомления.
+            msg       (str)  : Текст сообщения.
+            duration  (str)  : Длительность ("short" или "long").
+            important (bool) : True чтобы собрать уведомление даже если они отключены.
         
-        Return:
+        Returns:
             self : Объект класса для его дальнейшего использования
         """
 
-        # Валидация параметров перед выполнением
-        if not NOTIFICATION_FLAG:
-            logger.warning(f"Уведомления отключены: '{title}' не отправлено")
+        
+        # Если это не важное уведомление(которое срабатывает даже при отключённых уведомлениях) И
+        if (not important) and (not SHOW_NOTIFICATION):   # Состояние уведомления ON / OFF (True / False)
+            logger.warning(f"Уведомления отключены: '{title}' не собрано для отправки.")
+            self.toast = None   # явно кказываем уведомление не собранным
             return self
                 
         if duration not in ("short", "long"):
-            logger.error(f"Некорректная длительность: {duration}")
-            return self  # Проверка что уведомления включены И duration указано верно
+            logger.warning(f"Некорректная длительность: {duration} - автоматически изменено на > short.")
+            duration = "short"
         
 
         try:
@@ -65,13 +70,12 @@ class Funpay_notification:
                 duration = duration,        # Длительность в секундах
                 icon     = self.icon_path   # Путь к иконке (опционально)
             )
-
-            return self
-        
+   
         except Exception as e:
-            logger.error(f"Ошибка уведомлений: {e}")
-            return self
+            logger.error(f"Ошибка уведомлений: {e}.")
             
+        finally:
+            return self
 
 
 
@@ -79,30 +83,43 @@ class Funpay_notification:
     def add_actions(self,
                     label : str,
                     launch: str
-                    ) -> Self:
+                    ) -> Self | None:
         """Добавление действия(кнопки) к уведомлению
 
         Args:
             label  (str) : Текст кноки
             launch (str) : Ссылка кнопки (также можно использовать file:///)
 
-        Return:
+        Returns:
             self : Объект класса для его дальнейшего использования
         """
-        try:
-            self.toast.add_actions(
-                label=label,
-                launch=launch
-            )
-            return self
-        
-        except Exception as e:
-            logger.error(f"Ошибка уведомлений(add_actions): {e}")
-            return self
+        if hasattr(self, 'toast') and self.toast is not None: 
+            try:
+                self.toast.add_actions(
+                    label=label,
+                    launch=launch
+                )
             
+            except Exception as e:
+                logger.error(f"Ошибка уведомлений(add_actions): {e}")
+            
+            finally:
+                return self
+
+            
+    def _skip(self) -> "Self":
+        """Заглушка для пропуска последующих вызовов (например, .show())."""
+        logger.info("сработала заглушка")
+        return self
 
     def show(self) -> None:
-        """Отображает собранное уведомление"""
-        self.toast.show()  #  Отображаем уведомление
-        logger.info(f"Показано уведомление | {self.toast.title} |")
+        """Отображает собранное уведомление
+        
+        Return:
+            None
+        """
+        if hasattr(self, 'toast') and self.toast is not None:  # Проверка что toast принадлежит классу и != None
+            self.toast.show()  #  Отображаем уведомление
+            logger.info(f"Показано уведомление | {self.toast.title} |")
+
         

@@ -2,9 +2,12 @@
 
 for_me.md
 
+__pycache__\
+
 app/env/
 *.env
 
 *.log
 
 test*
+
