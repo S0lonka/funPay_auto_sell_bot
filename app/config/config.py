@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from app.config.config_utils import *
+from app.utils.config_utils import *
 
 
 load_dotenv(dotenv_path="app/env/config.env")

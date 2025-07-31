@@ -2,6 +2,7 @@ from pathlib import Path
 import logging
 import os
 
+from app.utils.general_utils import toggle_logging
 from app.utils.notification import Funpay_notification
 from app.template.env_content import config_env_lines
 
@@ -17,7 +18,7 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger('file_utils')
-
+toggle_logging(logger)
 
 # Объект класса уведомлений
 notyfi = Funpay_notification() 

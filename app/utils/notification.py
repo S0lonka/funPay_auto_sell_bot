@@ -6,7 +6,7 @@ import logging
 import os
 
 from app.config.config import SHOW_NOTIFICATION
-
+from app.utils.general_utils import toggle_logging
 
 # Настройка логгера
 logging.basicConfig(
@@ -19,7 +19,13 @@ logging.basicConfig(
     ]
 )
 
+
+
+# Если False — логирование выключено
+ENABLE_LOGGING = False
+
 logger = logging.getLogger('notification')
+toggle_logging(logger)
 
 
 

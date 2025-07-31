@@ -7,3 +7,14 @@ config_env_lines = [
     ""
 ]
 
+config_logger_env_lines = [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+]
