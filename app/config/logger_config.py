@@ -4,4 +4,7 @@ from app.utils.config_utils import str_to_bool
 
 load_dotenv(dotenv_path="app/env/logger_config.env")
 
-TEST = str_to_bool(os.getenv("TEST"))
+MAIN = str_to_bool(os.getenv("MAIN"))
+NOTIFICATION = str_to_bool(os.getenv("NOTIFICATION"))
+FILE_UTILS = str_to_bool(os.getenv("FILE_UTILS"))
+# MAIN = str_to_bool(os.getenv("MAIN"))

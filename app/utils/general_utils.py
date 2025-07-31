@@ -1,6 +1,9 @@
 import logging
 import app.config.logger_config
 
+
+#!---------- LOGGING ----------
+
 def toggle_logging(logger: logging.Logger) -> None:
     """Отключенния логгирования - переданного логгера(По заданным значениям в logger_config)
     
@@ -23,17 +26,46 @@ def toggle_logging(logger: logging.Logger) -> None:
         logger.disabled = not enable    # Выключаем логгер(если enable = False)
 
 
+def create_logger(
+        name      : str,
+        file_name : str = "funPay.log",
+        level     : int = logging.INFO
+        ) -> logging.Logger:
+    """
+    Создаёт логгер
+
+    Args:
+        name      (str) : Имя создаваемого логгера.
+        file_name (str) : Имя файла куда будут записываться логи.
+        level     (int) : Уровень логгирования от 0 до 50 или в виде logging.WARNING.
+
+    Returns:
+        Logger : Собранный экземпляр класса.
+    """
+
+    logging.basicConfig(
+        level=level,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        handlers=[
+            logging.FileHandler(file_name,  mode='w'),  # Логи в файл, перезаписываем каждый запуск
+            logging.StreamHandler()                        # Логи в консоль
+    ])
+    return logging.getLogger(name)
+
+
 # Настройка логгера (после функции, тк, использует логгирование)
-logging.basicConfig(
-    level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
-        logging.StreamHandler()                        # Логи в консоль
-    ]
-)
-logger = logging.getLogger('general_utils')
+# logging.basicConfig(
+#     level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+#     format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
+#     datefmt='%Y-%m-%d %H:%M:%S',
+#     handlers=[
+#         logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
+#         logging.StreamHandler()                        # Логи в консоль
+#     ]
+# )
+# logger = logging.getLogger('general_utils')
+logger = create_logger("general_utils")
 toggle_logging(logger)
 
 
