@@ -12,9 +12,9 @@ config_logger_env_lines = [
     "# True  - ON",
     "# False - OFF",
     "",
-    "MAIN         = True",
-    "NOTIFICATION = True",
-    "FILE_UTILS   = True",
-    "",
+    "MAIN          = True",
+    "NOTIFICATION  = True",
+    "FILE_UTILS    = True",
+    "GENERAL_UTILS = True",
     ""
 ]

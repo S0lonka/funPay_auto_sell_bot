@@ -6,25 +6,12 @@ import logging
 import os
 
 from app.config.config import SHOW_NOTIFICATION
-from app.utils.general_utils import toggle_logging
+from app.utils.general_utils import *
+
+
 
 # Настройка логгера
-logging.basicConfig(
-    level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
-        logging.StreamHandler()                        # Логи в консоль
-    ]
-)
-
-
-
-# Если False — логирование выключено
-ENABLE_LOGGING = False
-
-logger = logging.getLogger('notification')
+logger = create_logger("notification")
 toggle_logging(logger)
 
 

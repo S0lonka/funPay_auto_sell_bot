@@ -2,25 +2,20 @@ from pathlib import Path
 import logging
 import os
 
-from app.utils.general_utils import toggle_logging
+from app.utils.general_utils import *
 from app.utils.notification import Funpay_notification
 from app.template.env_content import config_env_lines
 
 
+
+
 # Настройка логгера
-logging.basicConfig(
-    level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
-        logging.StreamHandler()                        # Логи в консоль
-    ]
-)
-logger = logging.getLogger('file_utils')
+logger = create_logger("main")
 toggle_logging(logger)
 
-# Объект класса уведомлений
+
+
+# Экземпляр класса уведомлений
 notyfi = Funpay_notification() 
 
 def check_file(path: str) -> bool:

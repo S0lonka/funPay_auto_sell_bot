@@ -13,20 +13,13 @@ import sys
 # My utils
 from app.config.config import ENV_DIRECTORY
 from app.utils.file_utils import check_file
+from app.utils.general_utils import *
 
 
 
 # Настройка логгера
-logging.basicConfig(
-    level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
-        logging.StreamHandler()                        # Логи в консоль
-    ]
-)
-logger = logging.getLogger('main')
+logger = create_logger("main")
+toggle_logging(logger)
 
 
 def main():
@@ -101,5 +94,5 @@ def click_by_login(driver: uc.Chrome) -> None:
 
 
 if __name__ == "__main__":
-    if check_file(fr"{ENV_DIRECTORY}\env.env"):
+    if check_file(fr"{ENV_DIRECTORY}\config.env"):
         main()

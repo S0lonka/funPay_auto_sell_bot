@@ -54,17 +54,6 @@ def create_logger(
     return logging.getLogger(name)
 
 
-# Настройка логгера (после функции, тк, использует логгирование)
-# logging.basicConfig(
-#     level=logging.INFO,  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-#     format='%(asctime)s - %(name)s - | %(levelname)s | -> %(message)s',
-#     datefmt='%Y-%m-%d %H:%M:%S',
-#     handlers=[
-#         logging.FileHandler('funPay.log',  mode='w'),  # Логи в файл, перезаписываем каждый запуск
-#         logging.StreamHandler()                        # Логи в консоль
-#     ]
-# )
-# logger = logging.getLogger('general_utils')
 logger = create_logger("general_utils")
 toggle_logging(logger)
 
